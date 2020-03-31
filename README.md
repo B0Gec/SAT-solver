@@ -8,5 +8,5 @@ Runtime example:
 
 Prequisites:
 
-* Haskell version 8.0.2
+* Haskell ghc version 8.0.2
 
