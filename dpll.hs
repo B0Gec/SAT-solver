@@ -5,7 +5,7 @@ import FindPure (findUnit, findPureLiteral, formula, formulaorig)
 
 
 hello2 = putStrLn "SAT solving!"
-main = hello2
+-- main = hello2
 
 
 -- ----- plan ------
@@ -50,21 +50,6 @@ firstLiteral (A (V h _) _) = h
 -- test_first = firstLiteral formula
 -- test_formulafirst = [pqner, uc, formula, formulaorig]
 -- test_firstLiteral = map firstLiteral formulafirst
-
-dpll (phi, val) = case (redox (phi, val)) of  -- step 1.repeat
-                (T, satval) -> (True, satval)               -- step 2. []
-                (A L T,_) -> (False, [])            -- step 2. ()
-                (phir, valr) -> let l = firstLiteral phir            -- step 3. choose
-                        in case (dpll (A (V l L) phir, valr)) of
-                                (True, sat) -> (True, sat)
-                                (False, _) -> dpll (A (V (neg l) L) phir, valr)
-                                -- sat -> sat
--- test = dpll (formulaorig, [])
--- testi = map (\x -> dpll (x,[])) formulaee
-
--- unsatcnf = "1 0\n-1 0\n-1 3 0\n-2 -3 0\n-1 2 -3 0\n"
-unsat = A (V "1" L ) T
-
 -- elemL konj = ... checks if () in clause => then fail. 
 elemL T = False
 elemL (A L t) = True
@@ -73,6 +58,35 @@ elemL (A _ t) = elemL t
 -- test_elemL2 = elemL formula
 -- test_elemL3 = elemL $ A L (A (V "3" L) (A (V "-2" (V "-3" L)) (A (V "2" (V "-3" L)) T)))
 -- test_elemL4 = elemL $ A (V "1" L) (A (V "-1" L) (A (V "-1" (V "3" L)) (A L (A (V "-1" (V "2" (V "-3" L))) T))))
+
+-- dpll (phi, val) = case (redox (phi, val)) of  -- step 1.repeat
+--                 (T, satval) -> (True, satval)               -- step 2. []
+--                 (A L T,_) -> (False, [])            -- step 2. ()
+--                 (phir, valr) -> let l = firstLiteral phir            -- step 3. choose
+--                         in case (dpll (A (V l L) phir, valr)) of
+--                                 (True, sat) -> (True, sat)
+--                                 (False, _) -> dpll (A (V (neg l) L) phir, valr)
+--                                 -- sat -> sat
+
+dpll (phi, val) = case (redox (phi, val)) of  -- step 1.repeat
+        (T, satval) -> (True, satval)               -- step 2. []
+        (A L T,_) -> (False, [])            -- step 2. ()
+        (phir, valr) -> if elemL phir then (False, [])
+                        else let l = firstLiteral phir            -- step 3. choose
+                        in case (dpll (A (V l L) phir, valr)) of
+                                (True, sat) -> (True, sat)
+                                (False, _) -> dpll (A (V (neg l) L) phir, valr)
+                                -- sat -> sat
+rdpll phi = dpll (phi, [])      -- rundpll
+
+
+
+test = dpll (formulaorig, [])
+testi = map (\x -> dpll (x,[])) formulae
+
+unsatcnfd = "1 0\n-1 0\n-1 3 0\n-2 -3 0\n-1 2 -3 0\n"
+unsat = A (V "1" L ) T
+
 
 
 -- quick tests:-- Dela prav:
