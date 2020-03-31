@@ -1,0 +1,15 @@
+c -- formula in dimacs --
+c formula = (p v q)A(-p v r)A(-q v -r)A(-p v q v -r)]
+p cnf 64 453
+p q 0
+-p r 0
+-q -r 0
+-p q -r 0
+
+c Atom pxyn is represented by 16*(x-1)+4*(y-1)+n
+p cnf 64 453
+1 0 
+10 0 
+22 0 
+43 0 
+64 0 
