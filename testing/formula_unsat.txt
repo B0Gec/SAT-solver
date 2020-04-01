@@ -1,0 +1,20 @@
+c -- formula in dimacs --
+c formula = (p v q)A(-p v r)A(-q v -r)A(-p v q v -r)]
+c Atom pxyn is represented by 16*(x-1)+4*(y-1)+n
+c 11988 + 12+12 = 12012
+c 64 = # of variables; 453 = # of clauses (rows)
+c p cnf 64 453
+c
+c p q 0
+c -p r 0
+c -q -r 0
+c -p q -r 0
+c
+c for real:
+c 3 variables, 4 clauses
+p cnf 3 4
+1 2 0
+1 0
+-1 3 0
+-1 0
+-1 2 -3 0
